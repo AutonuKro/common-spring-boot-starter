@@ -19,19 +19,14 @@ import java.util.Map;
 @Component
 public class DatabaseAutoConfigPostProcessor implements EnvironmentPostProcessor {
 
-    public static final String SPRING_EXCLUDE_PROPERTY = "spring.autoconfigure.exclude";
-
+    protected static final String SPRING_EXCLUDE_PROPERTY = "spring.autoconfigure.exclude";
     protected static final String PROPERTY_SOURCE_NAME = "databaseExclusionAutoConfigurationProperties";
-
     protected static final String INCLUDE_DATABASE_PROPERTY = "common.starter.datasource.include";
-
     protected static final String DB_MONGO = "MONGODB";
-
     protected static final String DB_POSTGRES = "POSTGRES";
-
     protected static final Map<String, List<String>> EXCLUSION_PROPERTIES_BY_DATABASE;
-
     protected static final List<String> DATABASE_EXCLUSION_PROPERTIES;
+    private final Log LOGGER;
 
     static {
         final List<String> mongoProperties = List.of("org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration", "org.springframework.boot.autoconfigure.data.mongo.MongoDataAutoConfiguration", "dev.autonu.framework.starterutils.TenantAwareMongoDataSourceConfiguration");
@@ -43,18 +38,14 @@ public class DatabaseAutoConfigPostProcessor implements EnvironmentPostProcessor
         DATABASE_EXCLUSION_PROPERTIES.addAll(postgresProperties);
     }
 
-    private final Log LOGGER;
-
     /**
      * @apiNote Use this one for testing
      */
     protected DatabaseAutoConfigPostProcessor() {
-
         this.LOGGER = null;
     }
 
     public DatabaseAutoConfigPostProcessor(DeferredLogFactory deferredLogFactory) {
-
         this.LOGGER = deferredLogFactory.getLog(DatabaseAutoConfigPostProcessor.class);
     }
 
@@ -67,7 +58,6 @@ public class DatabaseAutoConfigPostProcessor implements EnvironmentPostProcessor
      */
     @Override
     public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
-
         if (LOGGER != null) {
             LOGGER.info("Checking if is there any auto configuration for database to add.");
         }
@@ -108,7 +98,6 @@ public class DatabaseAutoConfigPostProcessor implements EnvironmentPostProcessor
     }
 
     private void removeFromDbExclusionProperties(List<String> excludedDbConfigs, String database) {
-
         if (LOGGER != null) {
             LOGGER.info(String.format("Adding database configuration for: %s", database));
         }

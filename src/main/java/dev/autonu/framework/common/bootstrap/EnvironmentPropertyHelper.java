@@ -23,7 +23,6 @@ public class EnvironmentPropertyHelper {
      * @param excludedAutoConfigs list of auto-configurations to exclude (never {@literal null})
      */
     public static void addDatabaseExclusionProperties(ConfigurableEnvironment environment, String propertySourceName, List<String> excludedAutoConfigs) {
-
         MutablePropertySources propertySources = environment.getPropertySources();
         Map<String, Object> properties = new LinkedHashMap<>();
         properties.put(SPRING_EXCLUDE_PROPERTY, String.join(",", excludedAutoConfigs));
@@ -38,7 +37,6 @@ public class EnvironmentPropertyHelper {
      * @param propertySourceName the name of the property source (never {@literal null})
      */
     public static void addPropertiesToEnvironment(Map<String, Object> properties, MutablePropertySources propertySources, String propertySourceName) {
-
         MapPropertySource source = (MapPropertySource) propertySources.get(propertySourceName);
         if (source == null) {
             MapPropertySource target = new MapPropertySource(propertySourceName, properties);

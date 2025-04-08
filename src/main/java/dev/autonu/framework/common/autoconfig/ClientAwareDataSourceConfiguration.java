@@ -20,22 +20,19 @@ import javax.sql.DataSource;
 public class ClientAwareDataSourceConfiguration {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientAwareDataSourceConfiguration.class);
-
     private final ClientAwareDataSourceProperties dataSourceProperties;
 
-    public ClientAwareDataSourceConfiguration(ClientAwareDataSourceProperties dataSourceProperties) {
-
+    public ClientAwareDataSourceConfiguration(ClientAwareDataSourceProperties dataSourceProperties){
         this.dataSourceProperties = dataSourceProperties;
     }
 
     @Bean
     @ConditionalOnProperty(prefix = "common.starter.datasource", name = {"url", "username", "password"})
-    public DataSource dataSource() {
-
+    public DataSource dataSource(){
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Creating Client-Aware DataSource with properties: {}", dataSourceProperties);
         }
-        HikariDataSource dataSource = new ClientAwareDataSource();
+        HikariDataSource dataSource = new ClientAwareDataSource(dataSourceProperties.sessionVariable());
         dataSource.setJdbcUrl(dataSourceProperties.url());
         dataSource.setUsername(dataSourceProperties.username());
         dataSource.setPassword(dataSourceProperties.password());

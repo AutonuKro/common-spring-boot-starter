@@ -20,31 +20,22 @@ import java.util.Map;
 public class LogPatternAutoConfigPostProcessor implements EnvironmentPostProcessor {
 
     protected static final String PROPERTY_SOURCE_NAME = "loggingPatternAutoConfigurationProperties";
-
     protected static final String SPRING_LOGGING_PATTERN_CONSOLE_PROPERTY = "logging.pattern.console";
-
     protected static final String SPRING_LOGGING_PATTERN_FILE_PROPERTY = "logging.pattern.file";
-
     protected static final String SPRING_LOGGING_FILE_NAME_PROPERTY = "logging.file.name";
-
     protected static final String LOGGING_FILE_PATH_PROPERTY = "common.starter.logging.file.path";
-
-    protected static final String LOGGING_PATTERN = "[%X{clientId}][%X{subClientId}][%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd'T'HH:mm:ss.SSSXXX}}][${spring.application.name}][%c][%M]: %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}";
-
+    protected static final String LOGGING_PATTERN = "[current_client_id: %X{clientId}][%d{${LOG_DATEFORMAT_PATTERN:yyyy-MM-dd'T'HH:mm:ss.SSSXXX}}][${spring.application.name}][%c][%M]: %m%n${LOG_EXCEPTION_CONVERSION_WORD:%wEx}";
     protected static final String LOGGING_FILE_NAME = "${spring.application.name}-${spring.profiles.active}.log";
-
     private final Log LOGGER;
 
     /**
      * @apiNote Use this one for testing
      */
-    protected LogPatternAutoConfigPostProcessor() {
-
+    protected LogPatternAutoConfigPostProcessor(){
         this.LOGGER = null;
     }
 
-    public LogPatternAutoConfigPostProcessor(DeferredLogFactory deferredLogFactory) {
-
+    public LogPatternAutoConfigPostProcessor(DeferredLogFactory deferredLogFactory){
         this.LOGGER = deferredLogFactory.getLog(LogPatternAutoConfigPostProcessor.class);
     }
 
@@ -59,8 +50,7 @@ public class LogPatternAutoConfigPostProcessor implements EnvironmentPostProcess
      * @param application will never be {@literal null}
      */
     @Override
-    public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application) {
-
+    public void postProcessEnvironment(ConfigurableEnvironment environment, SpringApplication application){
         if (LOGGER != null) {
             LOGGER.info(String.format("Setting up '%s' and '%s' variables in environment", SPRING_LOGGING_PATTERN_CONSOLE_PROPERTY, SPRING_LOGGING_PATTERN_FILE_PROPERTY));
         }

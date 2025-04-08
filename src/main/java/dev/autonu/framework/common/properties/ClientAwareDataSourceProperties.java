@@ -7,5 +7,5 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 
 @ConfigurationProperties(prefix = "common.starter.datasource")
-public record ClientAwareDataSourceProperties(String url, String username, String password) {
+public record ClientAwareDataSourceProperties(String url, String username, String password, String sessionVariable) {
 }

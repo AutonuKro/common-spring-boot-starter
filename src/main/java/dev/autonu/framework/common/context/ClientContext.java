@@ -14,18 +14,15 @@ final class ClientContext {
     }
 
     static void set(ClientUserAssociation clientUserAssociation) {
-
         TENANT_CONTEXT.set(clientUserAssociation);
     }
 
     @Nullable
     static ClientUserAssociation get() {
-
         return TENANT_CONTEXT.get();
     }
 
     static void clear() {
-
         TENANT_CONTEXT.remove();
     }
 }

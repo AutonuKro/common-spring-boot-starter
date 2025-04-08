@@ -15,17 +15,20 @@ import java.sql.Statement;
 public class ClientAwareDataSource extends HikariDataSource {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientAwareDataSource.class);
+    private final String sessionVariable;
+
+    public ClientAwareDataSource(String sessionVariable){
+        this.sessionVariable = sessionVariable;
+    }
 
     @Override
-    public Connection getConnection() throws SQLException {
-
+    public Connection getConnection() throws SQLException{
         Connection connection = super.getConnection();
         return getConnection(connection);
     }
 
     @Override
-    public Connection getConnection(String username, String password) throws SQLException {
-
+    public Connection getConnection(String username, String password) throws SQLException{
         Connection connection = super.getConnection(username, password);
         return getConnection(connection);
     }
@@ -35,23 +38,21 @@ public class ClientAwareDataSource extends HikariDataSource {
      *
      * @param connection will never be {@literal null}
      */
-    private static Connection getConnection(Connection connection) throws SQLException {
-
+    private Connection getConnection(Connection connection) throws SQLException{
         try (Statement sql = connection.createStatement()) {
             ClientUserAssociation clientUserAssociation = ClientContext.get();
-            Long clientId;
+            Integer clientId;
             if (clientUserAssociation != null) {
                 clientId = clientUserAssociation.clientId();
             } else {
-                clientId = -1L;
+                clientId = -1;
             }
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Query is being performed by client: {}", clientId);
             }
-            String query = "SET app.app.current_client_id = %d";
-            sql.execute(String.format(query, clientId));
+            String query = "SET " + this.sessionVariable + " = " + clientId;
+            sql.execute(query);
         }
-
         return connection;
     }
 }
